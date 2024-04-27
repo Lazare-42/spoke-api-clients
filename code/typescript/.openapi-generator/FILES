@@ -1,0 +1,13 @@
+.gitignore
+.openapi-generator-ignore
+api.ts
+api/apis.ts
+api/calendarEventsApi.ts
+api/calendarsApi.ts
+git_push.sh
+model/createCalendarParams.ts
+model/event.ts
+model/eventStatus.ts
+model/models.ts
+model/provider.ts
+model/systemTime.ts

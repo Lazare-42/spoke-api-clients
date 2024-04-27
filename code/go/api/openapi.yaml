@@ -1,0 +1,362 @@
+openapi: 3.0.0
+info:
+  title: spoke_handler
+  version: 0.2.0
+servers:
+- url: /
+paths:
+  /calendar_events:
+    get:
+      description: list all events of a calendar
+      operationId: calendar_calendar_events_list_events
+      parameters:
+      - explode: true
+        in: query
+        name: calendar_id
+        required: true
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: cursor
+        required: false
+        schema:
+          format: int32
+          nullable: true
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: offset
+        required: true
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: limit
+        required: true
+        schema:
+          format: int32
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Event'
+                type: array
+          description: ""
+        default:
+          description: ""
+      tags:
+      - calendar events
+  /calendar_events/{uuid}:
+    get:
+      description: get event with uuid
+      operationId: calendar_calendar_events_get_event
+      parameters:
+      - explode: false
+        in: path
+        name: uuid
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+          description: ""
+        default:
+          description: ""
+      tags:
+      - calendar events
+  /calendar_events/{uuid}/bot:
+    delete:
+      operationId: calendar_calendar_events_unschedule_record_event
+      parameters:
+      - explode: false
+        in: path
+        name: uuid
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+          description: ""
+        default:
+          description: ""
+      tags:
+      - calendar events
+    post:
+      operationId: calendar_calendar_events_schedule_record_event
+      parameters:
+      - explode: false
+        in: path
+        name: uuid
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+          description: ""
+        default:
+          description: ""
+      tags:
+      - calendar events
+  /calendars:
+    get:
+      operationId: calendar_calendars_list_calendars
+      responses:
+        "200":
+          description: ""
+        default:
+          description: ""
+      tags:
+      - calendars
+    post:
+      description: synchronize all events of a new calendar
+      operationId: calendar_calendars_create_calendar
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCalendarParams'
+        required: true
+      responses:
+        "200":
+          description: ""
+        default:
+          description: ""
+      tags:
+      - calendars
+  /calendars/{uuid}:
+    delete:
+      operationId: calendar_calendars_delete_calendar
+      parameters:
+      - explode: false
+        in: path
+        name: uuid
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: ""
+        default:
+          description: ""
+      tags:
+      - calendars
+    get:
+      operationId: calendar_calendars_get_calendar
+      parameters:
+      - explode: false
+        in: path
+        name: uuid
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: ""
+        default:
+          description: ""
+      tags:
+      - calendars
+    patch:
+      operationId: calendar_calendars_update_calendar
+      parameters:
+      - explode: false
+        in: path
+        name: uuid
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: ""
+        default:
+          description: ""
+      tags:
+      - calendars
+components:
+  schemas:
+    Event:
+      example:
+        google_id: google_id
+        calendar_id: 5
+        attendees: ""
+        end_time:
+          secs_since_epoch: 0
+          nanos_since_epoch: 0
+        is_organizer: true
+        session_id: session_id
+        error: error
+        recurring_event_id: recurring_event_id
+        uuid: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        delete_token: delete_token
+        agenda_id: 7
+        refuse_recording_by: refuse_recording_by
+        start_time:
+          secs_since_epoch: 0
+          nanos_since_epoch: 0
+        account_id: 6
+        project_id: 2
+        meeting_url: meeting_url
+        record: true
+        name: name
+        id: 0
+        is_recurring: true
+        status: null
+      properties:
+        id:
+          format: int32
+          type: integer
+        google_id:
+          type: string
+        name:
+          type: string
+        account_id:
+          format: int32
+          type: integer
+        meeting_url:
+          type: string
+        start_time:
+          $ref: '#/components/schemas/SystemTime'
+        calendar_id:
+          format: int32
+          type: integer
+        attendees: {}
+        record:
+          type: boolean
+        is_organizer:
+          type: boolean
+        end_time:
+          $ref: '#/components/schemas/SystemTime'
+        status:
+          $ref: '#/components/schemas/EventStatus'
+        error:
+          nullable: true
+          type: string
+        session_id:
+          nullable: true
+          type: string
+        project_id:
+          format: int32
+          nullable: true
+          type: integer
+        refuse_recording_by:
+          nullable: true
+          type: string
+        delete_token:
+          type: string
+        recurring_event_id:
+          nullable: true
+          type: string
+        is_recurring:
+          type: boolean
+        agenda_id:
+          format: int32
+          nullable: true
+          type: integer
+        uuid:
+          format: uuid
+          type: string
+      required:
+      - account_id
+      - attendees
+      - calendar_id
+      - delete_token
+      - end_time
+      - google_id
+      - id
+      - is_organizer
+      - is_recurring
+      - meeting_url
+      - name
+      - record
+      - start_time
+      - status
+      - uuid
+      type: object
+    SystemTime:
+      example:
+        secs_since_epoch: 0
+        nanos_since_epoch: 0
+      properties:
+        secs_since_epoch:
+          format: uint64
+          minimum: 0.0
+          type: integer
+        nanos_since_epoch:
+          format: uint32
+          minimum: 0.0
+          type: integer
+      required:
+      - nanos_since_epoch
+      - secs_since_epoch
+      type: object
+    EventStatus:
+      enum:
+      - PrepareRecording
+      - Recording
+      - Error
+      - None
+      type: string
+    CreateCalendarParams:
+      example:
+        calendar_ids_to_sync:
+        - calendar_ids_to_sync
+        - calendar_ids_to_sync
+        oauth_refresh_token: oauth_refresh_token
+        oauth_client_secret: oauth_client_secret
+        platform: null
+        oauth_client_id: oauth_client_id
+      properties:
+        oauth_client_id:
+          nullable: true
+          type: string
+        oauth_client_secret:
+          nullable: true
+          type: string
+        oauth_refresh_token:
+          type: string
+        platform:
+          $ref: '#/components/schemas/Provider'
+        calendar_ids_to_sync:
+          items:
+            type: string
+          nullable: true
+          type: array
+      required:
+      - oauth_refresh_token
+      - platform
+      type: object
+    Provider:
+      description: Fields with value `"simple"` parse as `Kind::Simple`. Fields with
+        value `"fancy"` parse as `Kind::SoFancy`.
+      enum:
+      - Google
+      - Microsoft
+      type: string

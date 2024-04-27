@@ -1,0 +1,13 @@
+.openapi-generator-ignore
+Dockerfile
+README.md
+_client.sh
+client.sh
+client.sh.bash-completion
+docs/CalendarEventsApi.md
+docs/CalendarsApi.md
+docs/CreateCalendarParams.md
+docs/Event.md
+docs/EventStatus.md
+docs/Provider.md
+docs/SystemTime.md
